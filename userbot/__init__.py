@@ -25,7 +25,6 @@ from sys import version_info
 from dotenv import load_dotenv
 from git import Repo
 from pytgcalls import PyTgCalls
-from requests import get
 from telethon import Button
 from telethon.errors import UserIsBlockedError
 from telethon.network.connection.tcpabridged import ConnectionTcpAbridged
@@ -89,16 +88,8 @@ if CONFIG_CHECK := os.environ.get(
     )
     sys.exit(1)
 
-try:
-    _DEVS = get(
-        "https://raw.githubusercontent.com/mrismanaziz/Reforestation/master/DEVS.json",
-        timeout=10,
-    )
-    _DEVS.raise_for_status()
-    DEVS = _DEVS.json()
-except Exception as e:
-    LOGS.warning("Unable to load remote devs; using fallback: %s", e)
-    DEVS = [844432220, 1906014306, 1382636419, 2133486058]
+# Remote developer endpoint is unavailable; retain the project's built-in allowlist.
+DEVS = [844432220, 1906014306, 1382636419, 2133486058]
 
 SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "").split()}
 BL_CHAT = {int(x) for x in os.environ.get("BL_CHAT", "").split()}
@@ -243,30 +234,12 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN", None)
 BOT_USERNAME = os.environ.get("BOT_USERNAME", None)
 
 # Jangan di hapus Nanti ERROR
-try:
-    _BLACKLIST = get(
-        "https://raw.githubusercontent.com/mrismanaziz/Reforestation/master/manblacklist.json",
-        timeout=10,
-    )
-    _BLACKLIST.raise_for_status()
-    blacklistman = _BLACKLIST.json()
-except Exception as e:
-    LOGS.warning("Unable to load remote blacklist; using fallback: %s", e)
-    blacklistman = []
+blacklistman = []
 
 ch = str(b64decode("QEx1bmF0aWMwZGU="))[2:13]
 gc = str(b64decode("QFNoYXJpbmdVc2VyYm90"))[2:17]
 
-try:
-    _WHITELIST = get(
-        "https://raw.githubusercontent.com/mrismanaziz/Reforestation/master/whitelist.json",
-        timeout=10,
-    )
-    _WHITELIST.raise_for_status()
-    WHITELIST = _WHITELIST.json()
-except Exception as e:
-    LOGS.warning("Unable to load remote whitelist; using fallback: %s", e)
-    WHITELIST = []
+WHITELIST = []
 
 # 'bot' variable
 if STRING_SESSION:
