@@ -54,7 +54,9 @@ def multiman():
     failed = 0
     if STRING_SESSION:
         try:
+            LOGS.info("Connecting primary Telegram user session...")
             bot.start()
+            LOGS.info("Primary Telegram session authenticated; starting voice-call client...")
             call_py.start()
             LOOP.run_until_complete(man_client(bot))
             user = bot.get_me()
@@ -66,8 +68,8 @@ def multiman():
             if user.id in blacklistman:
                 LOGS.warning(MSG_BLACKLIST.format(name, version))
                 sys.exit(1)
-        except Exception as e:
-            LOGS.info(str(e))
+        except Exception:
+            LOGS.exception("Primary Telegram session startup failed")
 
     if STRING_2:
         try:
