@@ -1,9 +1,17 @@
 FROM mrismanaziz/man-userbot:buster
 
-RUN git clone -b Man-Userbot https://github.com/mrismanaziz/Man-Userbot /home/man-userbot/ \
-    && chmod 777 /home/man-userbot \
-    && mkdir /home/man-userbot/bin/
+WORKDIR /home/man-userbot/
+RUN rm -rf /home/man-userbot && mkdir -p /home/man-userbot
+COPY . /home/man-userbot/
 
 WORKDIR /home/man-userbot/
+RUN git init \
+    && git checkout -b Man-Userbot \
+    && git config user.email "railway-build@localhost" \
+    && git config user.name "Railway Build" \
+    && git add -A \
+    && git commit -m "Build fork source" \
+    && chmod +x start \
+    && mkdir -p bin
 
-CMD [ "bash", "start" ]
+CMD ["python3", "-m", "userbot"]
